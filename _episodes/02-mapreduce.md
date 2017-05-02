@@ -3,8 +3,15 @@ title: "MapReduce Primer"
 teaching: 30
 exercises: 0
 questions:
+- "What is MapReduce and how does it work?"
 objectives:
+- "Understand the principles behind MapReduce."
+- "Learn why MapReduce is usefule for processing large data sets."
 keypoints:
+- "MapReduce is a software framework for processing large data sets in a distributed fashion."
+- "A data set is mapped into a collection of (key value) pairs."
+- "The (key, value) pairs can be manipulated (e.g. by sorting)."
+- "The result is a reduction over all pairs with the same key."
 ---
 MapReduce is a software framework for processing large data sets in a distributed fashion over a several machines. The core idea behind MapReduce 
 is mapping your data set into a collection of (key, value) pairs, and then reducing over all pairs with the same key. 
@@ -96,7 +103,7 @@ The mapping step is very simple. The idea is to apply a function to each element
 same as the Python `map` method that takes a function and sequence of input values and returns a sequence of values that have had the function 
 applied to them.
 
-!Mapping]({{ page.root }}/fig/02-mapping.png "Mapping")
+![Mapping]({{ page.root }}/fig/02-mapping.png "Mapping")
 
 In our word count example, we want to map each word in the input file into a key/value pair containing the word as key and the number of 
 occurances as the value, where the value is one (we'll compute the actual value later). This is used to represent an intermediate result that 
