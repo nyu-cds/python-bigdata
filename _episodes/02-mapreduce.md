@@ -96,6 +96,8 @@ The mapping step is very simple. The idea is to apply a function to each element
 same as the Python `map` method that takes a function and sequence of input values and returns a sequence of values that have had the function 
 applied to them.
 
+!Mapping]({{ page.root }}/fig/02-mapping.png "Mapping")
+
 In our word count example, we want to map each word in the input file into a key/value pair containing the word as key and the number of 
 occurances as the value, where the value is one (we'll compute the actual value later). This is used to represent an intermediate result that 
 says: “this word occurs one time”. It is equivalent to the following:
@@ -169,6 +171,8 @@ moby    1
 The shuffling step consists of grouping all the intermediate values that have the same output key. In our word count example, we want to sort the 
 intermediate key/value pairs on their keys. 
 
+![Shuffling]({{ page.root }}/fig/02-shuffling.png "Shuffling")
+
 For the simple, in-memory, version, we would just use the sorted function:
 
 ~~~
@@ -184,7 +188,7 @@ This would generate the output:
 ~~~
 {: .output}
 
-Since this is sill using the in-memory copy, we need to resort to a different approach to avoid memory issues for larger data sets.
+Since this is still using the in-memory copy, we need to resort to a different approach to avoid memory issues for larger data sets.
 
 ~~~~
 map_file = 'pg2701.txt.map'
@@ -224,6 +228,8 @@ except IOError:
 For the reduction step, we just need to count the number of values with the same key. Now that the different values are ordered by keys 
 (i.e., the different words are listed in alphabetic order), it becomes easy to count the number of times they occur by summing values as 
 long as they have the same key. 
+
+![Reducing]({{ page.root }}/fig/02-reducing.png "Reducing")
 
 For the simple, in-memory, version, we can use lambda functions like this:
 
