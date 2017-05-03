@@ -22,6 +22,8 @@ A Spark program typically follows a simple paradigm:
 - One or more workers, called *executors*, run code sent to them by the driver on their partitions of the RDD which is distributed across the cluster.
 - Results are then sent back to the driver for aggregation or compilation.
 
+Remember that an RDD is a Resilient Distributed Data set, which is essentially a distributed collection of items.
+
 Essentially the driver program creates one or more RDDs, applies operations to transform the RDD, then invokes some action on the transformed RDD.
 
 These steps are outlined as follows:
@@ -59,7 +61,9 @@ This is different from Hadoop code, where you might submit a job from anywhere t
 ## MapReduce with Spark
 
 To start using Spark, we have to create an RDD. The `SparkContext` provides a number of methods to do this. We will use the `textFile` method, 
-which reads a file an creates an RDD of strings, one for each line in the file.
+which reads a file an creates an RDD of strings, one for each line in the file. 
+
+Create a file called `wordcount.py` with the following code:
 
 ~~~
 from pyspark import SparkContext
@@ -70,6 +74,13 @@ text = sc.textFile('pg2701.txt')
 print(text.take(10))
 ~~~
 {: .python}
+
+We run this using the PySpark `spark-submit` command as follows:
+
+~~~
+spark-submit workcount.py
+~~~
+{: .bash}
 
 Running this program display the first 10 entries in the RDD:
 
@@ -83,7 +94,10 @@ Running this program display the first 10 entries in the RDD:
 We use the same splitter function we used previously to split lines correctly. The `flatMap` method applies the function to all elements of the 
 RDD and flattens the results into a single list of words.
 
+Making these changes, `wordcount.py` now looks like this:
+
 ~~~
+from pyspark import SparkContext
 import re
 
 # remove any non-words and split lines into separate words
@@ -91,9 +105,13 @@ import re
 def splitter(line):
     line = re.sub(r'^\W+|\W+$', '', line)
     return map(str.lower, re.split(r'\W+', line))
-    
-words = text.flatMap(splitter)
-print(words.take(10))
+
+if __name__ == '__main__':
+	sc = SparkContext("local", "Simple App")
+	
+	text = sc.textFile('pg2701.txt')
+	words = text.flatMap(splitter)
+	print(words.take(10))
 ~~~
 {: .python}
 
@@ -104,11 +122,26 @@ After running this, `words` will conting the individual words:
 ~~~
 {: .output}
 
-Now we perform the mapping step. This is simply the case of applying the function `lambda x: (x,1)` to each element.
+Now we perform the mapping step. This is simply the case of applying the function `lambda x: (x,1)` to each element. Our `wordcount.py` program
+now looks like this:
 
 ~~~
-words_mapped = words.map(lambda x: (x,1))
-print(words_mapped.take(10))
+from pyspark import SparkContext
+import re
+
+# remove any non-words and split lines into separate words
+# finally, convert all words to lowercase
+def splitter(line):
+    line = re.sub(r'^\W+|\W+$', '', line)
+    return map(str.lower, re.split(r'\W+', line))
+
+if __name__ == '__main__':
+	sc = SparkContext("local", "wordcount")
+	
+	text = sc.textFile('pg2701.txt')
+	words = text.flatMap(splitter)
+	words_mapped = words.map(lambda x: (x,1))
+	print(words_mapped.take(10))
 ~~~
 {: .python}
 
@@ -119,11 +152,27 @@ This results in the mapped RDD:
 ~~~
 {: .output}
 
-Next, the shuffling step is performed using the `sortByKey` method:
+Next, the shuffling step is performed using the `sortByKey` method. Adding this to our `wordcount.py` program
+results in:
 
 ~~~
-sorted_map = words_mapped.sortByKey()
-print(sorted_map.take(10))
+from pyspark import SparkContext
+import re
+
+# remove any non-words and split lines into separate words
+# finally, convert all words to lowercase
+def splitter(line):
+    line = re.sub(r'^\W+|\W+$', '', line)
+    return map(str.lower, re.split(r'\W+', line))
+
+if __name__ == '__main__':
+	sc = SparkContext("local", "wordcount")
+	
+	text = sc.textFile('pg2701.txt')
+	words = text.flatMap(splitter)
+	words_mapped = words.map(lambda x: (x,1))
+	sorted_map = words_mapped.sortByKey()
+	print(sorted_map.take(10))
 ~~~
 {: .python}
 
@@ -135,12 +184,28 @@ This results in the output:
 {: .output}
 
 For the reduce step, we use the `reduceByKey` method to apply the supplied function to merge values for each key. In this case, the `add` 
-function will perform a sum.
+function will perform a sum. We need to import the `add` operator in order to be able to use it. Now `wordcount.py` looks like:
 
 ~~~
+from pyspark import SparkContext
 from operator import add
-counts = wc.reduceByKey(add)
-print(counts.take(10))
+import re
+
+# remove any non-words and split lines into separate words
+# finally, convert all words to lowercase
+def splitter(line):
+    line = re.sub(r'^\W+|\W+$', '', line)
+    return map(str.lower, re.split(r'\W+', line))
+
+if __name__ == '__main__':
+	sc = SparkContext("local", "wordcount")
+	
+	text = sc.textFile('pg2701.txt')
+	words = text.flatMap(splitter)
+	words_mapped = words.map(lambda x: (x,1))
+	sorted_map = words_mapped.sortByKey()
+	counts = sorted_map.reduceByKey(add)
+	print(counts.take(10))
 ~~~
 {: .python}
 
@@ -152,10 +217,28 @@ Here is the output after this step:
 ~~~
 {: .output}
 
-Finally, we can use the `max` method to find the word with the maximum number of occurrences.
+Finally, we can use the `max` method to find the word with the maximum number of occurrences. Here is the final version of `wordcount.py`:
 
 ~~~
-print(counts.max(lambda x: x[1]))
+from pyspark import SparkContext
+from operator import add
+import re
+
+# remove any non-words and split lines into separate words
+# finally, convert all words to lowercase
+def splitter(line):
+    line = re.sub(r'^\W+|\W+$', '', line)
+    return map(str.lower, re.split(r'\W+', line))
+
+if __name__ == '__main__':
+	sc = SparkContext("local", "wordcount")
+	
+	text = sc.textFile('pg2701.txt')
+	words = text.flatMap(splitter)
+	words_mapped = words.map(lambda x: (x,1))
+	sorted_map = words_mapped.sortByKey()
+	counts = sorted_map.reduceByKey(add)
+	print(counts.max(lambda x: x[1]))
 ~~~
 {: .python}
 
@@ -199,11 +282,9 @@ def isprime(n):
 ~~~
 {: .python}
 
-Now we can create an RDD comprising all numbers from 0 to n (in this case n = 1000000).
+Now we can create an RDD comprising all numbers from 0 to n (in this case n = 1000000) using the code:
 
 ~~~
-from spark import sc
-
 # Create an RDD of numbers from 0 to 1,000,000
 nums = sc.parallelize(xrange(1000000))
 ~~~
@@ -215,6 +296,42 @@ We can then count these to determine the number of primes.
 ~~~
 # Compute the number of primes in the RDD
 print(nums.filter(isprime).count())
+~~~
+{: .python}
+
+Here is the final version of the `primes.py` program:
+
+~~~
+from pyspark import SparkContext
+
+def isprime(n):
+    """
+    check if integer n is a prime
+    """
+    # make sure n is a positive integer
+    n = abs(int(n))
+    # 0 and 1 are not primes
+    if n < 2:
+        return False
+    # 2 is the only even prime number
+    if n == 2:
+        return True
+    # all other even numbers are not primes
+    if not n & 1:
+        return False
+    # range starts with 3 and only needs to go up the square root of n
+    # for all odd numbers
+    for x in range(3, int(n**0.5)+1, 2):
+        if n % x == 0:
+            return False
+    return True
+    
+if __name__ == '__main__':
+	sc = SparkContext("local", "primes")
+	# Create an RDD of numbers from 0 to 1,000,000
+	nums = sc.parallelize(xrange(1000000))
+	# Compute the number of primes in the RDD
+	print(nums.filter(isprime).count())
 ~~~
 {: .python}
 
