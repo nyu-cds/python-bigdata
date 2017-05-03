@@ -67,7 +67,8 @@ This should display output like:
 
 Once you are running `pyspark`, you can open Spark UI by pointing your browser at [http://localhost:4040/](http://localhost:4040/).
 
-> If you are seeing lots of `INFO` and `WARNING` messages, you can do the following:
+> ### If you are seeing lots of `INFO` and `WARNING` messages
+> To reduce the verbose output from Spark, you can do the following:
 > 
 > Copy `/_path_to_spark_/conf/log4j.properties.template` to `/_path_to_spark_/conf/log4j.properties` (`\_path_to_spark\conf` for Windows). 
 > Edit the file and change the line:
