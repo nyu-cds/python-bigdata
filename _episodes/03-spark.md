@@ -9,7 +9,9 @@ objectives:
 keypoints:
 - "Spark defines an API for distributed computing using distributed data sets."
 - "A driver program coordinates the overall computation."
-- "
+- "An executor is a process that runs computations and stores data."
+- "Application code is sent to the executors."
+- "Tasks are sent to the executors to run."
 
 ---
 ## Spark Overview
@@ -25,16 +27,16 @@ Essentially the driver program creates one or more RDDs, applies operations to t
 These steps are outlined as follows:
 1. Define one or more RDDs either through accessing data stored on disk (HDFS, Cassandra, HBase, Local Disk), parallelizing some collection in memory, 
 transforming an existing RDD, or by caching or saving.
-2. Invoke operations on the RDD by passing tasks (functions) to each element of the RDD. Spark offers over 80 high level operators beyond Map and 
+2. Invoke operations on the RDD by passing closures (functions) to each element of the RDD. Spark offers over 80 high level operators beyond Map and 
 Reduce.
 3. Use the resulting RDDs with actions (e.g. count, collect, save, etc.). Actions kick off the computing on the cluster.
 
-When Spark runs a task on a worker, any variables used are copied to that node, but are maintained within the local scope of 
-that task.
+When Spark runs a closure on a worker, any variables used in the closure are copied to that node, but are maintained within the local scope of 
+that closure.
 
 Spark provides two types of shared variables that can be interacted with by all workers in a restricted fashion:
 
-- *Broadcast variables* are distributed to all workers, but are read-only. These variables can be used as lookup tables or lists.
+- *Broadcast variables* are distributed to all workers, but are read-only. These variables can be used as lookup tables or stopword lists.
 - *Accumulators* are variables that workers can "add" to using associative operations and are typically used as counters.
 
 ## Spark Execution
@@ -42,15 +44,15 @@ Spark provides two types of shared variables that can be interacted with by all 
 Spark applications are run as independent sets of processes, coordinated by a `SparkContext` in the driver program. The context will 
 connect to some cluster manager (e.g. YARN) which allocates system resources. 
 
-Each worker in the cluster is managed by an executor, which is in turn controlled by the SparkContext. An executor manages computation as well as 
-storage and caching on each machine.
+Each worker in the cluster is managed by an executor, which is in 
+turn managed by the SparkContext. The executor manages computation as well as storage and caching on each machine.
+
+![Spark cluster components]({{ page.root }}/fig/03-cluster.png "Spark cluster components")
 
 What is important to note is that:
 - Application code is sent from the driver to the executors, and the executors specify the context and the various tasks to be run.
 - The executors communicate back and forth with the driver for data sharing or for interaction.
 - Drivers are key participants in Spark jobs, and therefore, they should be on the same network as the cluster.
-
-![Spark cluster components]({{ page.root }}/fig/03-cluster.png "Spark cluster components")
 
 This is different from Hadoop code, where you might submit a job from anywhere to the `JobTracker`, which then handles the execution on the cluster.
 
