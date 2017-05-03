@@ -67,19 +67,20 @@ This should display output like:
 
 Once you are running `pyspark`, you can open Spark UI by pointing your browser at [http://localhost:4040/](http://localhost:4040/).
 
-NOTE: If you are seeing lots of `INFO` and `WARNING` messages, you can do the following:
-
-Copy `/_path_to_spark_/conf/log4j.properties.template` to `/_path_to_spark_/conf/log4j.properties` (`\_path_to_spark\conf` for Windows). 
-Edit the file and change the line:
-
-~~~
-log4j.rootCategory=INFO, console
-~~~
-{: .python}
-
-to
-
-~~~
-log4j.rootCategory=ERROR, console
-~~~
-{: .python}
+> If you are seeing lots of `INFO` and `WARNING` messages, you can do the following:
+> 
+> Copy `/_path_to_spark_/conf/log4j.properties.template` to `/_path_to_spark_/conf/log4j.properties` (`\_path_to_spark\conf` for Windows). 
+> Edit the file and change the line:
+> 
+> ~~~
+> log4j.rootCategory=INFO, console
+> ~~~
+> {: .python}
+> 
+> to
+> 
+> ~~~
+> log4j.rootCategory=ERROR, console
+> ~~~
+> {: .python}
+{: .callout}
