@@ -1,6 +1,6 @@
 ---
 title: "Introduction to Spark"
-teaching: 30
+teaching: 40
 exercises: 0
 questions:
 - "How do you program using Spark?"

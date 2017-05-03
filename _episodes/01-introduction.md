@@ -1,6 +1,6 @@
 ---
 title: "Introduction"
-teaching: 30
+teaching: 10
 exercises: 0
 questions:
 - "What is Spark and what is it used for?"

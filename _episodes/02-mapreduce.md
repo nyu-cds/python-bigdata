@@ -1,6 +1,6 @@
 ---
 title: "MapReduce Primer"
-teaching: 30
+teaching: 40
 exercises: 0
 questions:
 - "What is MapReduce and how does it work?"
