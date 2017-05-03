@@ -370,6 +370,6 @@ Running this program generates the correct answer:
 
 ## References
 
-Benjamin Bengfort, [Getting Started with Spark (in Python)](https://districtdatalabs.silvrback.com/getting-started-with-spark-in-python)
-[A Hands-on Introduction to MapReduce in Python](https://zettadatanet.wordpress.com/2015/04/04/a-hands-on-introduction-to-mapreduce-in-python)
-Lucas Allen, [Spark Dataframes and MLlib](http://www.techpoweredmath.com/spark-dataframes-mllib-tutorial/)
+- Benjamin Bengfort, [Getting Started with Spark (in Python)](https://districtdatalabs.silvrback.com/getting-started-with-spark-in-python)
+- [A Hands-on Introduction to MapReduce in Python](https://zettadatanet.wordpress.com/2015/04/04/a-hands-on-introduction-to-mapreduce-in-python)
+- Lucas Allen, [Spark Dataframes and MLlib](http://www.techpoweredmath.com/spark-dataframes-mllib-tutorial/)
