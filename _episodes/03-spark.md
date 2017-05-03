@@ -49,9 +49,11 @@ To start using Spark, we have to create an RDD. The `SparkContext` provides a nu
 which reads a file an creates an RDD of strings, one for each line in the file.
 
 ~~~
-from spark import sc
+from pyspark import SparkContext
 
-text = sc.textFile('pg2701.txt', use_unicode=False)
+sc = SparkContext("local", "Simple App")
+
+text = sc.textFile('pg2701.txt')
 print(text.take(10))
 ~~~
 {: .python}
