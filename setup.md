@@ -7,9 +7,10 @@ Download Apache Spark from [here](https://spark.apache.org/downloads.html). Make
 
 ## Mac and Linux
 
-Uncompress and untar the archive, then move it to a known location such as `/home/<user>/spark`,  `/Users/<user>/spark`, or . 
+Uncompress and untar the archive, then move it to a known location such as `/home/<user>/spark` or `/Users/<user>/spark`. We'll refer to
+this location as `/_path_to_spark_` below.
 
-Copy `/path/to/spark/conf/log4j.properties.template` to `/path/to/spark/conf/log4j.properties`. Edit the file and change the line:
+Copy `/_path_to_spark_/conf/log4j.properties.template` to `/_path_to_spark_/conf/log4j.properties`. Edit the file and change the line:
 
 ~~~
 log4j.rootCategory=INFO, console
@@ -26,16 +27,16 @@ log4j.rootCategory=ERROR, console
 Run the following command:
 
 ~~~
-PATH=$PATH:/path/to/spark/bin
+PATH=$PATH:/_path_to_spark_/bin
 ~~~
 {: .bash}
 
 ## Windows
 
 Uncompress and untar the archive (you may need WinZip or another utility for this), then move it to a known location such as 
-`C:\Users\<user>\spark`.
+`C:\Users\<user>\spark`. We'll refer to this location as `\_path_to_spark_` below.
 
-Copy `C:\path\to\spark\conf\log4j.properties.template` to `C:\path\to\spark\conf\log4j.properties`. Edit the file and change the line:
+Copy `C:\_path_to_spark_\conf\log4j.properties.template` to `C:\_path_to_spark_\conf\log4j.properties`. Edit the file and change the line:
 
 ~~~
 log4j.rootCategory=INFO, console
@@ -54,7 +55,7 @@ Download the [winutils.exe]({{ page.root }}/files/winutils.exe) program and plac
 Run the commands:
 
 ~~~
-set SPARK_PATH=C:\path\to\spark
+set SPARK_PATH=C:\_path_to_spark_\spark
 set PATH=%PATH%;%SPARK_PATH%\bin;C:\winutils\bin
 set HADOOP_HOME=C:\winutils
 ~~~
