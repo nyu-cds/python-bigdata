@@ -5,7 +5,7 @@ permalink: /setup/
 ---
 Download Apache Spark from [here](https://spark.apache.org/downloads.html). Make sure you have at least version 2.1.1 for Windows.
 
-## Mac and Linux
+### Mac and Linux
 
 Uncompress and untar the archive, then move it to a known location such as `/home/<user>/spark` or `/Users/<user>/spark`. We'll refer to
 this location as `/_path_to_spark_` below.
@@ -31,7 +31,7 @@ PATH=$PATH:/_path_to_spark_/bin
 ~~~
 {: .bash}
 
-## Windows
+### Windows
 
 Uncompress and untar the archive (you may need WinZip or another utility for this), then move it to a known location such as 
 `C:\Users\<user>\spark`. We'll refer to this location as `\_path_to_spark_` below.
