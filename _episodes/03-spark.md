@@ -68,7 +68,7 @@ Create a file called `wordcount_spark.py` with the following code:
 ~~~
 from pyspark import SparkContext
 
-sc = SparkContext("local", "Simple App")
+sc = SparkContext("local", "wordcount")
 
 text = sc.textFile('pg2701.txt')
 print(text.take(10))
@@ -112,7 +112,7 @@ def splitter(line):
     return map(str.lower, re.split(r'\W+', line))
 
 if __name__ == '__main__':
-	sc = SparkContext("local", "Simple App")
+	sc = SparkContext("local", "wordcount")
 	
 	text = sc.textFile('pg2701.txt')
 	words = text.flatMap(splitter)
